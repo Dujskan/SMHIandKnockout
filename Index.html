@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <link rel="stylesheet" type="text/css" href="main.css"></link>
+
+    </header>
+    <body>
+       <input type="text" placeholder="Location Name" data-bind="value: locationName, valueUpdate: 'afterkeydown'" />
+        <input type="text" placeholder="Latitude" data-bind="value: lat, valueUpdate: 'afterkeydown'" />
+        <input type="text" placeholder="Longitude" data-bind="value: long, valueUpdate: 'afterkeydown'" />
+        <button data-bind="click: getWeatherData, enable: longAndLatIsInRange()">Add</button>
+
+       <table data-bind="visible: locationData().length > 0">
+          <thead>
+              <tr>
+                  <td>Location</td>
+                  <td>Latitiude</td>
+                  <td>Longitude</td>
+                  <td>Average (C)</td>
+                  <td>Mean (C)</td>
+                  <td></td>
+              </tr>
+          </thead>
+           <tbody data-bind="foreach: locationData">
+               <tr>
+                   <td data-bind="text: locationName"></td>
+                   <td data-bind="text: lat"></td>
+                   <td data-bind="text: long"></td>
+                   <td data-bind="text: average"></td>
+                   <td data-bind="text: mean"></td>
+                   <td data-bind="click: $parent.deleteLoaction.bind($data)">Remove</td>
+               </tr>
+           </tbody>
+       </table>
+
+
+        <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
+
+
+        <script type="text/javascript">
+
+            function WeatherViewModel(){
+                var self = this;
+
+                self.locationData = ko.observableArray();
+                self.locationName = ko.observable('');
+
+                //West and East
+                self.long = ko.observable('16');
+
+                //South and North
+                self.lat = ko.observable('56.3586');
+
+
+                self.longAndLatIsInRange = function(){
+                    var long = parseFloat(self.long());
+                    var lat = parseFloat(self.lat());
+
+                    return (self.locationName().length > 0) &&
+                           (lat <= 70.75 && lat >= 52.50) &&
+                           (long >= 2.25 && long <= 38.00);
+                };
+
+                self.deleteLoaction = function(location){
+                    self.locationData.remove(location)
+                }
+
+                self.getWeatherData = function(){
+
+                    var url = 'http://opendata-download-metfcst.smhi.se/api/category/pmp1.5g/version/1/geopoint/lat/' + self.lat() + '/lon/' + self.long() + '/data.json';
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        crossDomain: true,
+                        success: function (response) {
+
+                            var average;
+                            var degrees = response.timeseries.map(function(item){return item.tcc;}).sort()
+                            var median = degrees[(Math.round(degrees.length / 2))];
+
+                            var sum = 0;
+                            degrees.forEach(function(degree){
+
+                                sum += degree;
+                            })
+                            average = sum / degrees.length;
+
+                            self.locationData.push({
+                                locationName : self.locationName(),
+                                long: self.long(),
+                                lat: self.lat(),
+                                average: average,
+                                mean: median});
+
+                            self.locationName('');
+                            self.long('');
+                            self.lat('');
+
+                        },
+                       error: function (response) {
+                           if(response.state() == 'rejected'){
+                               alert('FIELD POINT OUT OF BOUNDS')
+                           }
+                       }
+                });
+                }
+
+            }
+
+            var viewModel = new WeatherViewModel()
+            ko.applyBindings(viewModel);
+
+
+        </script>
+    </body>
+
+</html>
