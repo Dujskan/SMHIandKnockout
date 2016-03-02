@@ -2,87 +2,72 @@
 <html>
 
 <head>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="main.css" />
     <title>Knckout and SMHI API</title>
+
 </head>
 
 <body>
-
-    <div class="page-wrap">
-        <nav class="navbar">
-            <div class="login">
-                <a href="#">Login</a>
-            </div>
-        </nav>
-
-
-        <div class="content">
-            <div class="leftMenu">
-                <a>Menu 1</a></br>
-                </br>
-                <a>Menu 2</a></br>
-                </br>
-                <a>Menu 3</a></br>
-            </div>
-
-
-            <div class="leftContent">
-                <div class="container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Location</td>
-                                <td>Latitiude</td>
-                                <td colspan="2">Longitude</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="text" placeholder="Location Name" data-bind="value: locationName, valueUpdate: 'afterkeydown'" />
-                                </td>
-                                <td>
-                                    <input type="number" placeholder="Latitude" data-bind="value: lat, valueUpdate: 'afterkeydown'" />
-                                </td>
-                                <td>
-                                    <input type="number" placeholder="Longitude" data-bind="value: long, valueUpdate: 'afterkeydown'" />
-                                </td>
-                                <td colspan="2">
-                                    <button data-bind="click: getWeatherData, enable: longAndLatIsInRange()">Add</button>
-                                </td>
-                            </tr>
-                            <tr class="header">
-                                <td>Location</td>
-                                <td>Latitiude</td>
-                                <td>Longitude</td>
-                                <td>Average (C)</td>
-                                <td>Mean (C)</td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: locationData, visible: locationData().length > 0">
-                            <tr>
-                                <td data-bind="text: locationName"></td>
-                                <td data-bind="text: lat"></td>
-                                <td data-bind="text: long"></td>
-                                <td data-bind="text: average"></td>
-                                <td data-bind="text: mean"></td>
-                                <td data-bind="click: $parent.deleteLoaction.bind($data)">Remove</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-            <div class="rightContent">
-                <div class="container">
-                    <p>Right Content</p>
-                </div>
-            </div>
+    <nav class="navbar navbar-default">
+       <div class="container">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand">SMHI API AND KNOCKOUT</a>
         </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="row">
+             <section class="col-xs-9">
+                <table class="table">
+                    <thead>
+                        <tr class="">
+                            <td>
+                                <input type="text" placeholder="Location Name" data-bind="value: locationName, valueUpdate: 'afterkeydown'" />
+                            </td>
+                            <td>
+                                <input type="number" placeholder="Latitude" data-bind="value: lat, valueUpdate: 'afterkeydown'" />
+                            </td>
+                            <td>
+                                <input type="number" placeholder="Longitude" data-bind="value: long, valueUpdate: 'afterkeydown'" />
+                            </td>
+                            <td colspan="2">
+                                <button data-bind="click: getWeatherData, enable: longAndLatIsInRange()">Add</button>
+                            </td>
+                        </tr>
+                        <tr class="header">
+                            <td>Location</td>
+                            <td>Latitiude</td>
+                            <td>Longitude</td>
+                            <td>Average (C)</td>
+                            <td>Mean (C)</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: locationData, visible: locationData().length > 0">
+                        <tr>
+                            <td data-bind="text: locationName"></td>
+                            <td data-bind="text: lat"></td>
+                            <td data-bind="text: long"></td>
+                            <td data-bind="text: average"></td>
+                            <td data-bind="text: mean"></td>
+                            <td data-bind="click: $parent.deleteLoaction.bind($data)">Remove</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+    </div>
+    <div class="footer">
+
     </div>
 
-    <footer class="site-footer">this is the footer</footer>
-
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
     <script src="app.js"></script>
 </body>
